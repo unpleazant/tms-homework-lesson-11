@@ -1,0 +1,13 @@
+a: incorrect number - wrong length 1
+1q2w3e4r: incorrect number - wrong length 8
+wefffffff: incorrect number - wrong length 9
+c12tract2doc211: incorrect number - does not start with "docnum" or "contract"
+docnum3doc31111: correct number
+1111111111111111: incorrect number - wrong length 16
+contract9012341: correct number
+bbvhsjdhbfhb: incorrect number - wrong length 12
+cwedf: incorrect number - wrong length 5
+docnum789012345: correct number
+contract2doc211: correct number
+docnum789012342: correct number
+do11um789012342: incorrect number - does not start with "docnum" or "contract"

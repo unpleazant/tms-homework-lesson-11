@@ -1,2 +1,0 @@
-bbvhsjdhbfhb
-numbers are of the wrong length or do not contain "docnum", "contract"
