@@ -1,6 +1,7 @@
 package com.tms11;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.function.Predicate;
 
 /**
  * Представим, что в Java нет коллекции типа ArrayList.
@@ -14,72 +15,90 @@ import java.util.ArrayList;
  * Предусамотреть возможность автоматического расширения коллекции при добавлении элемента в том случае,
  * когда коллекция уже заполнена.
  */
-public class CustomList<C> {
+public class CustomList<E> {
 
-    private ArrayList<C> list;
+    private Object[] myList;
+    private int idx;
 
-    @Override
-    public String toString() {
-        return "{CustomList : " + list + '}';
-    }
-
-    /**
-     * Конструктор коллекции, размер по умолчанию = 10
-     */
     public CustomList() {
-        this.list = new ArrayList<>(10);
+        this(10);
     }
 
-    /**
-     * @param collectionSize - задаваемый размер коллекции
-     */
-    public CustomList(int collectionSize) {
-        this.list = new ArrayList<>(collectionSize);
-    }
-
-    /**
-     * Метод для добавления элемента в коллецкию
-     * @param element - добавляемый элемент
-     */
-    public void addElement(C element) {
-        this.list.add(element);
-    }
-
-    /**
-     * Метод для удаления элемента из коллекции
-     * @param element - элемент который хотим удалить
-     */
-    public void removeElement(C element) {
-        this.list.remove(element);
-    }
-
-    /**
-     * Метод очистки всей коллеции
-     */
-    public void removeAllElements() {
-        this.list.clear();
-    }
-
-    /**
-     * Метод получения элемента по индексу
-     * @param index - индекс эелемнта, который хотим "достать" из коллекции
-     * @return элемент коллекции
-     */
-    public C getElementByIndex(int index) {
-        return this.list.get(index);
-    }
-
-    /**
-     * Проверка на наличие элемента в коллекции
-     * @param element - проверяемый элемент
-     * @return true/false
-     */
-    public boolean isCustomListContainsAnElement(C element) {
-        return this.list.contains(element);
+    public CustomList(int initialcapacity) {
+        myList = new Object[initialcapacity];
     }
 
     public int size() {
-        return this.list.size();
+        return idx;
+    }
+
+    public void add(E element) {
+        add(idx, element);
+    }
+
+    public void add(int index, E element) {
+        if (index < 0 || index > idx) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        if (idx > myList.length - 1) {
+            increaseSize();
+        }
+        if (index < idx) {
+            if (idx + 1 - index >= 0) System.arraycopy(myList, index, myList, index + 1, idx + 1 - index);
+            myList[index] = element;
+            idx++;
+        } else {
+            myList[idx++] = element;
+        }
+    }
+
+    public boolean isContains(E element) {
+        return Arrays.stream(myList).anyMatch((Predicate<? super Object>) element);
+    }
+
+    public E get(int index) {
+        if (index < 0 || index > idx) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        return (E) myList[index];
+    }
+
+    public void remove(E element) {
+        for (int i = 0; i < idx; i++) {
+            if (myList[i].equals(element)) {
+                remove(i);
+            }
+        }
+    }
+
+    public void removeAll() {
+        for (int i = 0; i < idx; i++) remove(i);
+    }
+
+    public void remove(int index) {
+        if (index < 0 || index > idx) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        if (idx - 1 - index >= 0) System.arraycopy(myList, index + 1, myList, index, idx - 1 - index);
+
+        myList[idx - 1] = null;
+        idx--;
+    }
+
+    private void increaseSize() {
+        int newcapacity = (myList.length * 3 / 2) + 1;
+        myList = Arrays.copyOf(myList, newcapacity);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < idx; i++) {
+            sb.append(myList[i].toString() + ",");
+        }
+
+        return "[" + sb.toString().substring(0, sb.length() - 1) + "]";
     }
 
 }

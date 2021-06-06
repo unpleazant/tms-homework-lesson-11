@@ -1,5 +1,7 @@
 package com.tms11;
 
+import com.tms11.CustomList;
+
 import java.io.*;
 import java.util.*;
 
@@ -29,7 +31,6 @@ public class Runner {
         readFileAndWriteNumber();
         validateNumbers();
         createValidationReport();
-
     }
 
     private static void collectFiles() {
@@ -37,7 +38,7 @@ public class Runner {
         while (true) {
             String fileName = scanner.nextLine();
             if (isZero(fileName)) break;
-            else fileList.addElement(fileName);
+            else fileList.add(fileName);
         }
         scanner.close();
     }
@@ -47,7 +48,7 @@ public class Runner {
         String line;
         for (int i = 0; i < fileList.size(); i++) {
             try {
-                File file = new File(fileList.getElementByIndex(i));
+                File file = new File(fileList.get(i));
                 reader = new BufferedReader(new FileReader(file));
                 while ((line = reader.readLine()) != null) {
                     numberSet.add(line);
